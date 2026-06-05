@@ -1,4 +1,7 @@
 {
+  "name": "qr_generator",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "qrcode": "^1.5.4"
   }
