@@ -11,6 +11,9 @@ import QRCode from 'qrcode';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // 현재 디렉터리 경로(__dirname)를 구하기 위한 초기화
 const __filename = fileURLToPath(import.meta.url);
@@ -25,15 +28,24 @@ const QR_COLOR_DARK = '#000000';
 //QR코드 배경 색상 (Hex Color Code)
 const QR_COLOR_LIGHT = '#FFFFFF';
 
-//QR코드로 변환할 vCard 3.0 규격의 연락처 원본 데이터(임시)
+// 환경변수에서 개별 필드 값 읽기 (기본값 처리 포함)
+const lastName = process.env.CONTACT_LAST_NAME || '';
+const firstName = process.env.CONTACT_FIRST_NAME || '';
+const telephone = process.env.CONTACT_TEL || '';
+const email = process.env.CONTACT_EMAIL || '';
+const url = process.env.CONTACT_URL || '';
+const note = process.env.CONTACT_NOTE || '';
+
+// 읽어온 개별 키값을 조합하여 vCard 3.0 규격 문자열 생성
 const vCardData = [
     'BEGIN:VCARD',
     'VERSION:3.0',
-    'N:홍;길동;;;',
-    'FN:홍길동',
-    'ORG:테크 컴퍼니',
-    'TEL;TYPE=CELL:010-1234-5678',
-    'EMAIL:hong@example.com',
+    `N:${lastName};${firstName};;;`,
+    `FN:${`${lastName}${firstName}`.trim()}`,
+    `TEL;TYPE=CELL:${telephone}`,
+    `EMAIL;TYPE=HOME:${email}`,
+    `URL:${url}`,
+    `NOTE;CHARSET=UTF-8:${note}`,
     'END:VCARD'
 ].join('\n');
 
